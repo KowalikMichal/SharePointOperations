@@ -97,8 +97,8 @@ function addUserSharePointGroup() {
 	var oWeb = clientContext.get_web().get_siteGroups();
 	var oGroup = oWeb.getById(19); //posible to oWeb.getByName('groupName');
 	var userCreationInfo = new SP.UserCreationInformation();
-		userCreationInfo.set_email('michal.kowalik@opel.com');
-		userCreationInfo.set_loginName('eur\\nzby07');
+		userCreationInfo.set_email('user@domain.com');
+		userCreationInfo.set_loginName('domain\\loginname');
 		userCreationInfo.set_title('Michal Kowalik');
 	this.oUser = oGroup.get_users().add(userCreationInfo);
 	clientContext.load(oUser);
@@ -106,5 +106,33 @@ function addUserSharePointGroup() {
 		console.log(this.oUser.get_title() + " added.");
 	}), Function.createDelegate(this, function(sender, args){
 		console.log(('Request failed. ' + args.get_message() + '\n'+args.get_stackTrace()));
+	}));
+}
+
+//add new group
+ function createGroup(){
+	var clientContext = new SP.ClientContext();
+	var oWeb = clientContext.get_web();
+	var groupCollection = oWeb.get_siteGroups();
+	var newGroup = new SP.GroupCreationInformation();
+		newGroup.set_title('New createGroup');
+		newGroup.set_description('This group handles the access to Admin documents'); oWeb.get_siteGroups().add(newGroup);
+	clientContext.load(groupCollection); clientContext.executeQueryAsync(function(){
+		console.log('New group has been created.');
+	}, function(){
+		console.log('Request failed:' + args.get_message());
+	});
+}
+
+//remove group
+function DeleteWebGroup() {
+	var clientContext = new SP.ClientContext.get_current();
+	var collGroup = clientContext.get_web().get_siteGroups();
+	var oGroup = collGroup.getById(1297); //posible to collGroup.getByName('groupName');
+  		collGroup.remove(oGroup);
+	clientContext.executeQueryAsync(Function.createDelegate(this, function(){
+		console.log("Group deleted.");
+	}), Function.createDelegate(this, function(sender, args){
+		console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
 	}));
 }
